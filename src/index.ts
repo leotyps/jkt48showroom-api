@@ -7,15 +7,8 @@ import { ApiError } from './utils/errorResponse'
 import api from './routes'
 import webhook from './webhooks'
 import { generateShowroomId } from './utils/api/showroom'
-import { handle } from 'hono/vercel'
 
-export const config = {
-  runtime: 'edge' // atau 'nodejs' kalau mau pakai node runtime
-}
-// import { startCron } from './cron'
 const app = new Hono()
-/// start Cron
-// startCron()
 
 if (!process.env.SECRET) throw new Error('No Secret Environtment!')
 if (!process.env.AUTH_SECRET) throw new Error('No Auth Secret Environtment!')
@@ -73,4 +66,9 @@ process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error)
 })
 
+// ✅ Vercel-compatible edge handler
+import { handle } from 'hono/vercel'
+export const config = {
+  runtime: 'edge'
+}
 export default handle(app)
