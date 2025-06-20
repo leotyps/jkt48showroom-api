@@ -7,7 +7,11 @@ import { ApiError } from './utils/errorResponse'
 import api from './routes'
 import webhook from './webhooks'
 import { generateShowroomId } from './utils/api/showroom'
+import { handle } from 'hono/vercel'
 
+export const config = {
+  runtime: 'edge' // atau 'nodejs' kalau mau pakai node runtime
+}
 // import { startCron } from './cron'
 const app = new Hono()
 /// start Cron
@@ -69,4 +73,4 @@ process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error)
 })
 
-export default app
+export default handle(app)
